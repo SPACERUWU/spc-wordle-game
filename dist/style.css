@@ -1,0 +1,202 @@
+body {
+    font-family: 'Arial', sans-serif; /* อาจลองใช้ font อื่นที่ดูทันสมัยขึ้น เช่น 'Helvetica Neue' */
+    display: flex;
+    flex-direction: column; /* เปลี่ยนเป็น column เพื่อจัดเนื้อหาในแนวตั้ง */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0; /* อาจลองเปลี่ยนเป็นสีอื่น เช่น #F5F5F5 หรือใช้ gradient อ่อนๆ */
+    margin: 0;
+    padding: 20px; /* เพิ่ม padding รอบๆ หน้าจอ */
+    box-sizing: border-box; /* สำคัญ: เพื่อให้ padding ไม่ดัน layout เกิน max-width */
+}
+
+#game-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 30px; /* เพิ่ม padding ภายใน container */
+    border-radius: 12px; /* เพิ่มความโค้งมนให้ดู soft ขึ้น */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้มีมิติมากขึ้น */
+    max-width: 500px; /* จำกัดความกว้างสูงสุดของเกม */
+    width: 100%; /* ทำให้ยืดหยุ่นสำหรับจอเล็ก */
+    margin-top: auto; /* ดัน container ลงกลางจอ (เมื่อมี footer หรือ header) */
+    margin-bottom: auto; /* ดัน container ขึ้นกลางจอ */
+}
+
+h1 {
+    font-size: 2.5em; /* ปรับขนาดหัวข้อ */
+    color: #333;
+    margin-bottom: 30px; /* เพิ่มระยะห่างใต้หัวข้อ */
+}
+
+#guesses {
+    margin-bottom: 25px;
+    /* ต้องแน่ใจว่า display: flex; อยู่ใน .row ไม่ใช่ #guesses */
+}
+
+.row {
+    display: flex; /* <-- สำคัญมาก! */
+    justify-content: center;
+    margin-bottom: 8px; /* เพิ่มระยะห่างระหว่างแถว */
+}
+
+.box {
+    width: 60px; /* เพิ่มขนาดช่องตัวอักษรให้ใหญ่ขึ้นนิดหน่อย */
+    height: 60px;
+    border: 2px solid #ccc;
+    border-radius: 4px; /* เพิ่มความโค้งมนให้ช่องตัวอักษร */
+    font-size: 2.5em; /* ปรับขนาดตัวอักษรในช่อง */
+    margin: 3px; /* เพิ่มระยะห่างระหว่างช่องตัวอักษร */
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease; /* เพิ่ม animation */
+}
+
+/* เพิ่ม animation เมื่อตัวอักษรปรากฏ */
+.box.filled { /* คุณต้องเพิ่ม class นี้ใน JS เมื่อพิมพ์ตัวอักษร */
+    transform: scale(1.05);
+}
+.box.filled.active { /* อาจจะให้เด้งนิดหน่อยเมื่อพิมพ์ */
+    animation: pop 0.1s ease-out;
+}
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* ปรับสีสำหรับคำใบ้ */
+.box.correct {
+    background-color: #6aaa64; /* เขียว Wordle */
+    border-color: #6aaa64;
+    color: white;
+}
+
+.box.present {
+    background-color: #c9b458; /* เหลือง Wordle */
+    border-color: #c9b458;
+    color: white;
+}
+
+.box.absent {
+    background-color: #787c7e; /* เทา Wordle */
+    border-color: #787c7e;
+    color: white;
+}
+
+#keyboard {
+    display: flex; /* ใช้ flex เพื่อความยืดหยุ่น */
+    flex-direction: column; /* จัดเรียงแถวแป้นพิมพ์ในแนวตั้ง */
+    gap: 8px; /* เพิ่มระยะห่างระหว่างแถวของแป้นพิมพ์ */
+    margin-top: 30px; /* เพิ่มระยะห่างจากตารางเดา */
+    padding: 0 10px; /* เพิ่ม padding ด้านข้างสำหรับแป้นพิมพ์ */
+}
+
+#keyboard > div { /* แถวของแป้นพิมพ์ */
+    display: flex;
+    justify-content: center;
+    gap: 6px; /* ระยะห่างระหว่างปุ่มในแถวเดียวกัน */
+}
+
+.key {
+    flex: 1; /* ให้ปุ่มขยายเท่าๆ กัน */
+    padding: 15px 5px; /* เพิ่ม padding ให้กดง่ายขึ้น */
+    border: none; /* เอา border ออก ให้ดูโมเดิร์นขึ้น */
+    border-radius: 6px; /* เพิ่มความโค้งมน */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #d3d6da; /* สีเทาอ่อนลงนิดหน่อย */
+    color: #1a1a1b;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.key:hover {
+    background-color: #c0c3c8; /* สีเข้มขึ้นเมื่อ hover */
+}
+
+.key:active {
+    transform: translateY(1px); /* ให้ความรู้สึกเหมือนปุ่มจมลงไป */
+    background-color: #b0b3b8;
+}
+
+.key.enter {
+    flex: 1.5; /* ทำให้ Enter ใหญ่ขึ้น */
+    background-color: #a0a0a0;
+    color: white;
+}
+.key.backspace {
+    flex: 1.5; /* ทำให้ Backspace ใหญ่ขึ้น */
+    background-color: #a0a0a0;
+    color: white;
+}
+
+/* ปรับสีแป้นพิมพ์ตามสถานะ */
+.key.correct {
+    background-color: #6aaa64;
+    color: white;
+}
+.key.present {
+    background-color: #c9b458;
+    color: white;
+}
+.key.absent {
+    background-color: #787c7e;
+    color: white;
+}
+
+#message {
+    margin-top: 25px; /* เพิ่มระยะห่างจากแป้นพิมพ์ */
+    font-size: 1.3em; /* เพิ่มขนาดข้อความแจ้งเตือน */
+    color: #ff3333; /* อาจใช้สีแดงที่เข้มขึ้นหรือส้ม */
+    min-height: 2em; /* กันไม่ให้ layout กระโดดเมื่อข้อความหายไป */
+    opacity: 0; /* ซ่อนข้อความเริ่มต้น */
+    transition: opacity 0.3s ease; /* เพิ่ม animation ให้ข้อความ */
+}
+#message.show {
+    opacity: 1;
+}
+
+
+#new-game-button {
+    margin-top: 30px; /* เพิ่มระยะห่าง */
+    padding: 12px 25px; /* เพิ่มขนาดปุ่ม */
+    font-size: 1.3em;
+    background-color: #4CAF50;
+    border-radius: 8px; /* ความโค้งมน */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+#new-game-button:hover {
+    background-color: #45a049;
+}
+#new-game-button:active {
+    transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #game-container {
+        padding: 15px;
+        margin: 10px;
+    }
+    .box {
+        width: 45px;
+        height: 45px;
+        font-size: 2em;
+        margin: 2px;
+    }
+    .key {
+        padding: 10px 3px;
+        font-size: 0.9em;
+    }
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    #message {
+        font-size: 1em;
+    }
+}
