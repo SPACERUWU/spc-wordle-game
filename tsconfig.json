@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2017", // <-- เปลี่ยนกลับเป็น es2017 (หรือ es2015 / esnext)
+    "module": "esnext", // <-- เปลี่ยนกลับเป็น esnext (สำคัญสำหรับ import/export ในเบราว์เซอร์)
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es2017"], // <-- เปลี่ยนกลับเป็น es2017 ให้เข้ากับ target
+    "sourceMap": true // <-- เปิด Source Map กลับมาเพื่อการ Debug
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

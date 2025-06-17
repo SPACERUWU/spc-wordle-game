@@ -1,0 +1,19 @@
+{
+  "name": "wordle-ts",
+  "version": "1.0.0",
+  "description": "Wordle game with TypeScript",
+  "main": "dist/script.js",
+  "scripts": {
+    "generate-wordlist": "node scripts/generate-wordlist.js", 
+    "build": "npx tsc",
+    "watch": "npx tsc --watch",
+    "start": "live-server"
+  },
+  "keywords": ["wordle", "typescript", "game"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.x.x",
+    "live-server": "^1.x.x"
+  }
+}
