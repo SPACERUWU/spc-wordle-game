@@ -2511,26 +2511,28 @@ async function checkGuess() {
     }
 }
 // --- Helper: Update Keyboard Key Colors ---
+// --- Helper: Update Keyboard Key Colors ---
 function updateKeyboardKey(keyChar, status) {
     const keyElement = document.querySelector(`button.key[data-key="${keyChar}"]`);
     if (keyElement) {
-        // ตรรกะการจัดลำดับความสำคัญของสี: Correct (เขียว) > Present (เหลือง) > Absent (เทา)
-        if (keyElement.classList.contains('correct')) {
-            // ถ้าเป็นสีเขียวอยู่แล้ว ไม่ต้องทำอะไรอีก
-            return;
-        }
-        else if (keyElement.classList.contains('present') && status === 'correct') {
-            // ถ้าเป็นสีเหลือง แต่ตอนนี้ควรเป็นสีเขียว -> เปลี่ยนเป็นเขียว
-            keyElement.classList.remove('present');
+        // ลบ Class สีเก่าทั้งหมดออกก่อน
+        keyElement.classList.remove('correct', 'present', 'absent');
+        // แล้วค่อยเพิ่ม Class สีที่เหมาะสมตามลำดับความสำคัญ
+        // ลำดับความสำคัญ: Correct (เขียว) > Present (เหลือง) > Absent (เทา)
+        if (status === 'correct') {
             keyElement.classList.add('correct');
         }
-        else if (!keyElement.classList.contains('present') && status === 'present') {
-            // ถ้ายังไม่ใช่สีเหลืองและสีเขียว แต่ตอนนี้ควรเป็นสีเหลือง -> เปลี่ยนเป็นเหลือง
-            keyElement.classList.add('present');
+        else if (status === 'present') {
+            // เพิ่มสีเหลืองเฉพาะถ้าปุ่มนั้นยังไม่เป็นสีเขียว
+            if (!keyElement.classList.contains('correct')) {
+                keyElement.classList.add('present');
+            }
         }
-        else if (status === 'absent' && !keyElement.classList.contains('present') && !keyElement.classList.contains('correct')) {
-            // ถ้ายังไม่มีสีเลย และตอนนี้ควรเป็นสีเทา -> เปลี่ยนเป็นเทา
-            keyElement.classList.add('absent');
+        else if (status === 'absent') {
+            // เพิ่มสีเทาเฉพาะถ้าปุ่มนั้นยังไม่เป็นสีเขียวหรือเหลือง
+            if (!keyElement.classList.contains('correct') && !keyElement.classList.contains('present')) {
+                keyElement.classList.add('absent');
+            }
         }
     }
 }
